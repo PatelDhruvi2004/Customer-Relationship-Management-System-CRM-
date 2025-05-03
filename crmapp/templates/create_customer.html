@@ -1,0 +1,192 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+
+<html>
+
+    <head> 
+
+        <meta charset="utf-8">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+        <title>Create Customer</title>
+
+        <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/flatly/bootstrap.min.css">
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <!-- jQuery (Full Version, Not Slim) -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
+<!-- Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Your custom script -->
+<script src="{% static 'js/app.js' %}"></script>
+
+    </head>
+
+    <style>
+        .container {
+            max-width: 800px;
+            background-color: #f0f0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 25px;
+            margin-bottom: 25px;
+
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .create_cust{
+            border:1px solid black;
+            padding:5px;
+            text-decoration:none;
+            color:white;
+            border-radius:3px;
+            background-color:#3e5771;
+        }
+        .create_cust:hover {
+            background-color:#2e4154;
+            color:white;
+            text-decoration:none;
+        }
+        .return_btn{
+            border:1px solid black;
+            padding:5px;
+            text-decoration:none;
+            color:white;
+            border-radius:3px;
+            background-color:#727e88;
+        }
+        .return_btn:hover {
+            background-color:#565e65;
+            color:white;
+            text-decoration:none;
+        }
+        .form-select:focus {
+            border-color: #80bdff !important;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        
+    </style>
+
+    <body >
+
+        <!-- Create Navbar here -->
+
+        {% include 'navdash.html' %}
+
+        <div class="container">
+
+            <br>
+         
+            {% block content %}
+
+            <div class="form">
+                <div class="container mt-0">
+                    <h3>Create Customer</h3>
+                    <p>Start adding in the required details for your customer.</p>
+                    <hr class="my-3 border-dark">
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label>First name*</label>
+                            <input type="text" class="form-control" name="cfname" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Last name*</label>
+                            <input type="text" class="form-control" name="clname" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email*</label>
+                            <input type="email" class="form-control" name="cemail" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phone*</label>
+                            <input type="text" class="form-control" name="cphone" minlength="10" maxlength="10" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Address*</label>
+                            <input type="text" class="form-control" name="cadd" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>City*</label>
+                            <input type="text" class="form-control" name="ccity" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Country*</label>
+                            <input type="text" class="form-control" name="ccountry" required></select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Item*</label>
+                            <select name="citem" id="item" class="form-select" >
+                                <option value="Laptop">Laptop</option>
+                                <option value="Mouse">Mouse</option>
+                                <option value="Keyboard">Keyboard</option>
+                                <option value="Graphics Card">Graphics Card</option>
+                                <option value="RAM">RAM</option>
+                                <option value="Processor (CPU)">Processor (CPU)</option>
+                                <option value="Motherboard">Motherboard</option>
+                                <option value="Hard Drive (HDD)">Hard Drive (HDD)</option>
+                                <option value="Solid State Drive (SSD)">Solid State Drive (SSD)</option>
+                                <option value="Printer">Printer</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Date*</label>
+                            <input type="date" class="form-control" name="cdate" required>
+                        </div>
+
+                        <button type="submit" class="create_cust"><i class="fa fa-check"></i> Create Customer</button>
+
+                        &nbsp;&nbsp;&nbsp;
+
+                        <a href="{% url 'customer_list' %}" class="return_btn"> 
+                            Return &nbsp; <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                        </a>
+
+                    </form>
+                </div>
+            </div>
+
+            {% endblock %}
+
+
+        </div>
+
+        <script src="{% static 'js/app.js' %}"></script>
+
+
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        
+        
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+
+
+    </body>
+
+
+
+</html>

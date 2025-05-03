@@ -1,0 +1,193 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+
+<html>
+
+    <head> 
+
+        <meta charset="utf-8">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+        <title>Update Customer</title>
+
+        <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/flatly/bootstrap.min.css">
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    </head>
+
+    <style>
+        .container {
+            max-width: 800px;
+            background-color: #f0f0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 25px;
+            margin-bottom: 25px;
+
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .btn-container {
+            margin-top: 20px;
+            display: flex;
+        }
+        .btn-update {
+            background-color: #0d6efd;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            border:0px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .btn-update i {
+            margin-left: 5px;
+        }
+
+        .btn-update:hover {
+            text-decoration: none;
+            color: white;
+            background-color:rgb(11, 99, 231);
+        }
+
+        .btn-return {
+            background-color: #3e5771;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            border:0px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .btn-return i {
+            margin-right: 5px;
+        }
+
+        .btn-return:hover {
+            text-decoration: none;
+            color: white;
+            background-color:#2e4154
+        }
+
+        .form-select:focus {
+            border-color: #80bdff !important;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        
+    </style>
+
+    <body >
+
+        <!-- Create Navbar here -->
+
+        {% include 'navdash.html' %}
+
+        <div class="container">
+
+            <br>
+         
+            {% block content %}
+            <div class="form">
+                <div class="container mt-0">
+                    <h2>Update Customer record</h2>
+                    <p>Update your record down below.</p>
+                    <hr class="my-3 border-dark">
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="form-label">First name*</label>
+                                <input type="text" name="first_name" class="form-control" value="{{ cust_update.first_name }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Last name*</label>
+                                <input type="text" name="last_name" class="form-control" value="{{ cust_update.last_name }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email*</label>
+                                <input type="email" name="email" class="form-control" value="{{ cust_update.email }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Phone*</label>
+                                <input type="text" name="phone" class="form-control" value="{{ cust_update.phone }}" minlength="10" maxlength="10" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Address*</label>
+                                <input type="text" name="address" class="form-control" value="{{ cust_update.address }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">City*</label>
+                                <input type="text" name="city" class="form-control" value="{{ cust_update.city }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Country*</label>
+                                <input type="text" name="country" class="form-control" value="{{ cust_update.country }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Item*</label>
+                                <select name="item" id="item" class="form-select" value="{{ cust_update.item }}" required>
+                                    <option value="Laptop" {% if cust_update.item == "Laptop" %} selected {% endif %}>Laptop</option>
+                                    <option value="Mouse" {% if cust_update.item == "Mouse" %} selected {% endif %}>Mouse</option>
+                                    <option value="Keyboard" {% if cust_update.item == "Keyboard" %} selected {% endif %}>Keyboard</option>
+                                    <option value="Graphics Card" {% if cust_update.item == "Graphics Card" %} selected {% endif %}>Graphics Card</option>
+                                    <option value="RAM" {% if cust_update.item == "RAM" %} selected {% endif %}>RAM</option>
+                                    <option value="Processor (CPU)" {% if cust_update.item == "Processor (CPU)" %} selected {% endif %}>Processor (CPU)</option>
+                                    <option value="Motherboard" {% if cust_update.item == "Motherboard" %} selected {% endif %}>Motherboard</option>
+                                    <option value="Hard Drive (HDD)" {% if cust_update.item == "Hard Drive (HDD)" %} selected {% endif %}>Hard Drive (HDD)</option>
+                                    <option value="Solid State Drive (SSD)" {% if cust_update.item == "Solid State Drive (SSD)" %} selected {% endif %}>Solid State Drive (SSD)</option>
+                                    <option value="Printer" {% if cust_update.item == "Printer" %} selected {% endif %}>Printer</option>
+                                </select> 
+                            </div>
+                            
+                        </div>
+                        <div class="btn-container">
+                            <button type="submit" class="btn-update">
+                                <i class="fa fa-save"></i> &nbsp;Update record
+                            </button>
+
+                            &nbsp;&nbsp;&nbsp;
+
+                            <a href="{% url 'view_customer' cust_update.id %}" class="btn-return">
+                                <i class="fa fa-arrow-left"></i> Return
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>   
+        {% endblock %}
+
+
+        </div>
+
+        <script src="{% static 'js/app.js' %}"></script>
+
+
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        
+        
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+
+
+    </body>
+
+
+
+</html>
+
+

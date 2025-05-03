@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Customer</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 800px;
+            background-color: #f0f0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 25px;
+            margin-bottom: 25px;
+
+        }
+
+        .customer-header {
+            display: flex;
+            align-items: center;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .customer-header i {
+            font-size: 24px;
+            margin-right: 10px;
+            color: #343a40;
+        }
+
+        .customer-info {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .customer-info strong {
+            font-weight: bold;
+            color: #212529;
+        }
+
+        .btn-container {
+            margin-top: 20px;
+            display: flex;
+        }
+
+        .btn-return {
+            background-color: #3e5771;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .btn-return i {
+            margin-right: 5px;
+        }
+
+        .btn-return:hover {
+            text-decoration: none;
+            color: white;
+            background-color:#2e4154
+        }
+
+        .btn-update {
+            background-color: #0d6efd;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .btn-update i {
+            margin-left: 5px;
+        }
+
+        .btn-update:hover {
+            text-decoration: none;
+            color: white;
+            background-color:rgb(11, 99, 231);
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .btn-delete i {
+            margin-left: 5px;
+        }
+
+        .btn-delete:hover {
+            text-decoration: none;
+            color: white;
+            background-color:rgb(187, 35, 50);
+        }
+    </style>
+</head>
+<body>
+
+    {% include 'navdash.html' %}
+
+    <div class="container">
+
+        <br>
+
+        {% block content %}
+
+            <div class="customer-header">
+                <div>
+                <i class="fas fa-user-circle"></i>
+                <span>{{ cust_view.last_name }} {{ cust_view.first_name }}</span>
+                </div>
+
+                
+            </div>
+
+            
+            <hr class="my-3 border-dark">
+
+            <div class="customer-info"><strong>ID:</strong> {{ cust_view.id }}</div>
+            <div class="customer-info"><strong>Email:</strong> {{ cust_view.email }}</div>
+            <div class="customer-info"><strong>Phone number:</strong> {{ cust_view.phone }}</div>
+            <div class="customer-info"><strong>Address:</strong> {{ cust_view.address }}</div>
+            <div class="customer-info"><strong>City:</strong> {{ cust_view.city }}</div>
+            <div class="customer-info"><strong>Country:</strong> {{ cust_view.country }}</div>
+            <div class="customer-info"><strong>Item:</strong> {{ cust_view.item }}</div>
+            <div class="customer-info"><strong>Creation date:</strong> {{ cust_view.date }}</div>
+
+            <div class="btn-container">
+                <a href="{% url 'customer_list' %}" class="btn-return">
+                    <i class="fas fa-arrow-left"></i> Return
+                </a>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;
+
+                <a href="{% url 'update_customer' cust_view.id %}" class="btn-update">
+                    Update record <i class="fas fa-plus"></i>
+                </a>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;
+
+                <a href="{% url 'delete_customer' cust_view.id %}" class="btn-delete" onclick="return confirm('Are you sure you want to delete this customer?');">
+                    Delete <i class="fas fa-minus"></i>
+                </a>
+
+            </div>
+
+        {% endblock %}
+    </div>
+
+</body>
+</html>

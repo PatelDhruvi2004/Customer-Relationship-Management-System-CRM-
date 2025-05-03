@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Email Group List</title>
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/flatly/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+</head>
+
+<style>
+    .back-button {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .back-button:hover {
+        background-color: #5a6268; /* Slightly darker shade */
+        border-color: #545b62;
+    }
+</style>
+
+
+<body>
+    {% include 'navdash.html' %}
+
+    {% block content %}
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Email Groups</h2>
+            <a href="{% url 'create_email_group' %}" class="btn btn-secondary back-button">
+                Back to Email Grouping Creation
+            </a>
+        </div>
+        <hr class="my-3 border border-secondary">
+
+        <table class="table table-hover table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>Group Name</th>
+                    <th>Purpose</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for group in email_groups %}
+                    <tr>
+                        <td>{{ group.group_name }}</td>
+                        <td>{{ group.purpose }}</td>
+                        <td>
+                            <a href="{% url 'view_email_group' group.id %}" class="btn btn-info btn-sm">View</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center">No email groups found</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endblock %}
+</body>
+</html>

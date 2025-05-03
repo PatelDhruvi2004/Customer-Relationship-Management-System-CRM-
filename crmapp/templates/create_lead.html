@@ -1,0 +1,253 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> ProjectX </title>
+
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/flatly/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script> 
+
+    <style>
+        .container {
+            max-width: 800px;
+            background-color: #f0f0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .create_cust {
+            border: 1px solid black;
+            padding: 5px;
+            text-decoration: none;
+            color: white;
+            border-radius: 3px;
+            background-color: #3e5771;
+        }
+
+        .create_cust:hover {
+            background-color: #2e4154;
+            color: white;
+            text-decoration: none;
+        }
+
+        .return_btn {
+            border: 1px solid black;
+            padding: 5px;
+            text-decoration: none;
+            color: white;
+            border-radius: 3px;
+            background-color: #727e88;
+        }
+
+        .return_btn:hover {
+            background-color: #565e65;
+            color: white;
+            text-decoration: none;
+        }
+
+
+        /* Match Select2 to Bootstrap form style */
+        .select2-container .select2-selection--single {
+            height: 10% !important;  /* Match Bootstrap input height */
+            padding: 3px !important;   /* Match Bootstrap input padding */
+            font-size: 1rem !important;             /* Match Bootstrap font size */
+            font-weight: 400;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            border: 1px solid #ced4da;              /* Bootstrap border color */
+            border-radius: 0.375rem;                 /* Bootstrap border-radius */
+        }
+
+        /* Hover effect like Bootstrap */
+        .select2-container--default .select2-selection--single:hover {
+            border-color: #80bdff !important;
+        }
+
+        /* Active (focused) state */
+        .select2-container--default .select2-selection--single:focus {
+            border-color: #80bdff !important;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        /* Fix the dropdown arrow */
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            top: 50%;
+            right: 5px;
+            transform: translateY(-50%);
+        }
+
+        /* Dropdown styles */
+        .select2-dropdown {
+            border: 1px solid #ced4da;
+            border-radius: 0.375rem;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Match dropdown items to Bootstrap style */
+        .select2-results__option {
+            padding: 0.5rem;
+        }
+
+        /* Highlight effect */
+        .select2-results__option--highlighted {
+            background-color: #007bff !important;
+            color: white !important;
+        }
+
+
+        .form-select:focus {
+            border-color: #80bdff !important;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        
+    </style>
+</head>
+
+<body>
+
+    {% include 'navdash.html' %}
+
+    <div class="container">
+        <br>
+        {% block content %}
+        <div class="form">
+            <div class="container mt-0">
+                <h3>Create Lead</h3>
+                <p>Start adding in the required details for your lead.</p>
+                <hr class="my-3 border-dark">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>First name*</label>
+                        <input type="text" class="form-control" name="lfname" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Last name*</label>
+                        <input type="text" class="form-control" name="llname" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email*</label>
+                        <input type="email" class="form-control" name="lemail" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone*</label>
+                        <input type="text" class="form-control" name="lphone" minlength="10" maxlength="10" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Address*</label>
+                        <input type="text" class="form-control" name="ladd" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>City*</label>
+                        <input type="text" class="form-control" name="lcity" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Country*</label>
+                        <input type="text" class="form-control" name="lcountry" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Item*</label>
+                        <select name="litem" id="item" class="form-select" >
+                            <option value="Laptop">Laptop</option>
+                            <option value="Mouse">Mouse</option>
+                            <option value="Keyboard">Keyboard</option>
+                            <option value="Graphics Card">Graphics Card</option>
+                            <option value="RAM">RAM</option>
+                            <option value="Processor (CPU)">Processor (CPU)</option>
+                            <option value="Motherboard">Motherboard</option>
+                            <option value="Hard Drive (HDD)">Hard Drive (HDD)</option>
+                            <option value="Solid State Drive (SSD)">Solid State Drive (SSD)</option>
+                            <option value="Printer">Printer</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="source">Source*</label>
+                        <select name="source" id="source" class="form-select" >
+                            <option value="Advertisement">Advertisement</option>
+                            <option value="Campaign">Campaign</option>
+                            <option value="Cold calling">Cold Calling</option>
+                            <option value="Reference">Reference</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status">Status*</label>
+                        <select name="status" id="status" class="form-select" >
+                            <option value="Lead">Lead</option>
+                            <option value="Opportunity">Opportunity</option>
+                            <option value="Quotation">Quotation</option>
+                            <option value="Lost Quotation">Lost Quotation</option>
+                            
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lead_owner">Lead Owner*</label>
+                        <select name="lead_owner" id="lead_owner" class="form-select" placeholder="Select a Lead Owner" >
+                            {% for row in users %}
+                            <option value="{{ row.id }}">{{ row.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Lead Date*</label>
+                        <input type="date" class="form-control" name="ldate" required>
+                    </div>
+
+                    <button type="submit" class="create_cust"><i class="fa fa-check"></i> Create Lead</button>
+
+                    &nbsp;&nbsp;&nbsp;
+
+                    <a href="{% url 'lead_list' %}" class="return_btn">
+                        Return &nbsp; <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                    </a>
+
+                </form>
+            </div>
+        </div>
+        {% endblock %}
+    </div>
+
+    <script src="{% static 'js/app.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#lead_owner').select2({
+                placeholder: "Select a Lead Owner",
+                allowClear: true,
+                width: '100%'
+            });
+        });
+    </script>
+
+</body>
+
+</html>

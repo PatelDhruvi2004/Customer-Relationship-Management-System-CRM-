@@ -1,0 +1,226 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Email Groups</title>
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/flatly/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        #groupFormContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: none;
+        }
+        #groupForm {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            width: 400px;
+        }
+
+        .check-history-btn {
+            background-color: #16a085 !important;
+            border-color: #1abc9c !important;
+            color:white !important;
+        }
+
+        .check-history-btn:hover {
+            background-color:rgb(22, 179, 148) !important;
+            color: white !important ;
+        }
+
+    </style>
+</head>
+<body>
+    {% include 'navdash.html' %}
+
+    {% block content %}
+    <div class="container mt-4">
+        <h2 style="padding-bottom:15px;">Create Email Group</h2>
+        <div class="d-flex justify-content-between mb-3">
+            <div>
+                <a class="btn btn-primary" href="{% url 'email_group_list' %}">View Email Group List&nbsp; <i class="fa fa-list"></i></a>&nbsp;&nbsp;
+                <a class="btn check-history-btn" href="{% url 'email_history' %}">Check Email History</a>
+            </div>
+            <div>
+                <button id="clearAllBtn" class="btn btn-danger d-none">Clear All</button>&nbsp;&nbsp;
+                <button id="createGroupBtn" class="btn btn-success d-none">Create Group</button>
+            </div>
+        </div>
+        
+        <hr class="my-3 border border-secondary">
+    
+        <!-- Filter Form -->
+        <form method="GET" id="filterForm">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="typeFilter">Filter by Type:</label>
+                    <select id="typeFilter" name="type" class="form-control">
+                        <option value="all">All</option>
+                        <option value="customer">Customer</option>
+                        <option value="lead">Lead</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="statusFilter">Filter by Status:</label>
+                    <select id="statusFilter" name="status" class="form-control">
+                        <option value="all">All</option>
+                        <option value="lead">Lead</option>
+                        <option value="opportunity">Opportunity</option>
+                        <option value="quotation">Quotation</option>
+                        <option value="lost quotation">Lost Quotation</option>
+                        <option value="customer">Customer</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    
+        <table class="table table-hover table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th><input type="checkbox" id="selectAll"></th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody id="emailGroupTable">
+                {% for row in email_list %}
+                    <tr class="data-row" data-type="{{ row.type }}" data-status="{{ row.status|lower }}">
+                        <td><input type="checkbox" class="select-row" value="{{ row.name }}"></td>
+                        <td>{{ row.name }}</td>
+                        <td>{{ row.type }}</td>
+                        <td>{{ row.status }}</td>
+                        <td>{{ row.email }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">No records found</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div id="groupFormContainer">
+        <div id="groupForm" class="container">
+            <h4>Create Email Group</h4>
+            <form id="groupCreationForm" method="POST" action="{% url 'create_email_group' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="groupName" class="form-label">Group Name:</label>
+                    <input type="text" id="groupName" name="group_name" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="groupPurpose" class="form-label">Purpose:</label>
+                    <textarea id="groupPurpose" name="purpose" class="form-control" required></textarea>
+                </div>
+
+                <!-- Hidden input for selected members -->
+                <input type="hidden" name="selected_members" id="selectedMembers">
+
+                <button type="submit" class="btn btn-primary">Create</button>
+                <button type="button" id="closeForm" class="btn btn-secondary">Cancel</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        $(document).ready(function () {
+            function filterTable() {
+                var typeFilter = $('#typeFilter').val().toLowerCase();
+                var statusFilter = $('#statusFilter').val().toLowerCase();
+                
+                $('.data-row').each(function () {
+                    var rowType = $(this).data('type').toLowerCase();
+                    var rowStatus = $(this).data('status').toLowerCase();
+    
+                    var showRow = (typeFilter === 'all' || rowType === typeFilter) &&
+                                  (statusFilter === 'all' || rowStatus === statusFilter);
+    
+                    $(this).toggle(showRow);
+                });
+            }
+    
+            $('#typeFilter, #statusFilter').on('change', filterTable);
+    
+            // Show 'Create Group' button when checkboxes are selected
+            $('.select-row, #selectAll').on('change', function () {
+                if ($('.select-row:checked').length > 0) {
+                    $('#createGroupBtn').removeClass('d-none');
+                } else {
+                    $('#createGroupBtn').addClass('d-none');
+                    $('#groupFormContainer').hide();
+                }
+            });
+
+            function updateButtons() {
+                if ($('.select-row:checked').length > 0) {
+                    $('#createGroupBtn, #clearAllBtn').removeClass('d-none');
+                } else {
+                    $('#createGroupBtn, #clearAllBtn').addClass('d-none');
+                    $('#groupFormContainer').hide();
+                }
+            }
+        
+            $('.select-row, #selectAll').on('change', updateButtons);
+    
+            // Select all functionality
+            $('#selectAll').on('change', function () {
+                $('.select-row').prop('checked', $(this).prop('checked')).trigger('change');
+            });
+
+            // Clear all selected checkboxes
+            $('#clearAllBtn').on('click', function () {
+                $('.select-row, #selectAll').prop('checked', false);
+                updateButtons();
+            });
+    
+            // Show form when 'Create Group' button is clicked
+            $('#createGroupBtn').on('click', function () {
+                $('#groupFormContainer').show();
+            });
+    
+            // Hide form when 'Cancel' button is clicked
+            $('#closeForm').on('click', function () {
+                $('#groupFormContainer').hide();
+            });
+
+            $("#groupCreationForm").submit(function () {
+                var selectedMembers = [];
+                $(".select-row:checked").each(function () {
+                    var row = $(this).closest("tr");
+                    selectedMembers.push({
+                        name: row.find("td:eq(1)").text().trim(),
+                        type: row.find("td:eq(2)").text().trim(),
+                        status: row.find("td:eq(3)").text().trim(),
+                        email: row.find("td:eq(4)").text().trim(),
+                    });
+                });
+    
+                // Store selected members as JSON string in hidden input
+                $("#selectedMembers").val(JSON.stringify(selectedMembers));
+            });
+            
+        });
+    </script>
+    
+    {% endblock %}
+</body>
+</html>

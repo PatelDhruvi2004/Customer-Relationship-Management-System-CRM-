@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background-color: #ffffff;
+            margin-bottom: 20px;
+        }
+        .chart-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .chart-box {
+            width: 48%;
+            min-width: 300px;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        .table {
+            margin-bottom: 0;
+            background: #fff;
+        }
+        .table th {
+            background-color: #2c3e50;
+            color: white;
+        }
+        .summary-box {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            padding: 15px;
+            background: #28a745;
+            color: white;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    {% include 'navdash.html' %}
+
+    {% block content %}
+
+    <div class="container">
+        <h2 class="text-center mb-4">Customer Report</h2>
+
+        <!-- Customer Summary -->
+        <div class="card">
+            <div class="summary-box">
+                Direct Customers: {{ direct_customers|default:"0" }} | Customers from Leads: {{ lead_customers|default:"0" }}
+            </div>
+        </div>
+
+        <!-- Graphs Container -->
+        <div class="card">
+            <h4 class="text-center">Customer Analytics</h4>
+            <div class="chart-container">
+                <div class="chart-box">
+                    <h5 class="text-center">Customer Distribution by Country</h5>
+                    <canvas id="countryChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h5 class="text-center">Customer Joining Trends (Month-wise)</h5>
+                    <canvas id="customerJoinChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Last 10 Created Customers Table -->
+        <div class="card">
+            <h4 class="text-center">Latest 10 Customers</h4>
+            <div class="table-container">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Country</th>
+                            <th>Created Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for customer in last_customers %}
+                        <tr>
+                            <td>{{ customer.id }}</td>
+                            <td>{{ customer.first_name }} {{ customer.last_name }}</td>
+                            <td>{{ customer.email }}</td>
+                            <td>{{ customer.phone }}</td>
+                            <td>{{ customer.country }}</td>
+                            <td>{{ customer.date }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">No customers found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Pie Chart for Customer Distribution by Country
+        var ctx1 = document.getElementById('countryChart').getContext('2d');
+        var countryChart = new Chart(ctx1, {
+            type: 'pie',
+            data: {
+                labels: {{ country_labels|safe }},
+                datasets: [{
+                    data: {{ country_values|safe }},
+                    backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff'],
+                    hoverOffset: 4
+                }]
+            }
+        });
+
+        // Bar Chart for Customer Join Trends
+        var ctx2 = document.getElementById('customerJoinChart').getContext('2d');
+        var customerJoinChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: {{ month_labels|safe }},
+                datasets: [{
+                    label: 'Customers Joined',
+                    data: {{ month_data|safe }},
+                    backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff'],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    </script>
+
+    {% endblock %}
+
+</body>
+</html>

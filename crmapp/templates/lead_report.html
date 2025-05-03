@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lead Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background-color: #ffffff;
+            margin-bottom: 20px;
+        }
+        .chart-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .chart-box {
+            width: 48%;
+            min-width: 300px;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        .table {
+            margin-bottom: 0;
+            background: #fff;
+        }
+        .table th {
+            background-color: #2c3e50;
+            color: white;
+        }
+        .conversion-box {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            padding: 15px;
+            background: #28a745;
+            color: white;
+            border-radius: 10px;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    {% include 'navdash.html' %}
+
+    {% block content %}
+
+    <div class="container">
+        <h2 class="text-center mb-4">Lead Report</h2>
+
+        <!-- Lead Conversion Rate -->
+        <div class="card">
+            <div class="conversion-box">
+                Lead To Custumer Conversion Rate: {{ conversion_rate }}%
+            </div>
+        </div>
+
+        <!-- Charts Container -->
+        <div class="card">
+            <h4 class="text-center">Lead Analytics</h4>
+            <div class="chart-container">
+                <!-- Lead Status Breakdown -->
+                <div class="chart-box">
+                    <h5 class="text-center">Lead Status Breakdown</h5>
+                    <canvas id="leadStatusChart"></canvas>
+                </div>
+
+                <!-- Lead Source Analysis -->
+                <div class="chart-box">
+                    <h5 class="text-center">Lead Source Analysis</h5>
+                    <canvas id="leadSourceChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lead List -->
+        <div class="card">
+            <h4 class="text-center">Latest 10 Leads</h4>
+            <div class="table-container">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th>Source</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lead in latest_leads %}
+                        <tr>
+                            <td>{{ lead.id }}</td>
+                            <td>{{ lead.first_name }} {{ lead.last_name }}</td>
+                            <td>{{ lead.email }}</td>
+                            <td>{{ lead.phone }}</td>
+                            <td>{{ lead.status }}</td>
+                            <td>{{ lead.source }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">No leads found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Lead Status Chart
+        var ctx1 = document.getElementById('leadStatusChart').getContext('2d');
+        var leadStatusChart = new Chart(ctx1, {
+            type: 'pie',
+            data: {
+                labels: {{ lead_status_labels|safe }},
+                datasets: [{
+                    label: 'Leads by Status',
+                    data: {{ lead_status_data|safe }},
+                    backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff'],
+                    hoverOffset: 4
+                }]
+            }
+        });
+
+        // Lead Source Chart
+        var ctx2 = document.getElementById('leadSourceChart').getContext('2d');
+        var leadSourceChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: {{ lead_source_labels|safe }},
+                datasets: [{
+                    label: 'Leads by Source',
+                    data: {{ lead_source_data|safe }},
+                    backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff'],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    </script>
+
+
+    {% endblock %}
+
+</body>
+</html>

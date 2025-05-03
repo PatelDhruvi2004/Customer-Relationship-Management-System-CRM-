@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Lead</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 800px;
+            background-color: #f0f0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 25px;
+            margin-bottom: 25px;
+
+        }
+
+        .lead-header {
+            display: flex;
+            align-items: center;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .lead-header i {
+            font-size: 24px;
+            margin-right: 10px;
+            color: #343a40;
+        }
+
+        .lead-info {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .lead-info strong {
+            font-weight: bold;
+            color: #212529;
+        }
+
+        .btn-container {
+            margin-top: 20px;
+            display: flex;
+        }
+
+        .btn-return {
+            background-color: #3e5771;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .btn-return i {
+            margin-right: 5px;
+        }
+
+        .btn-return:hover {
+            text-decoration: none;
+            color: white;
+            background-color:#2e4154
+        }
+
+        .btn-update {
+            background-color: #0d6efd;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            border:0px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .btn-update i {
+            margin-left: 5px;
+        }
+
+        .btn-update:hover {
+            text-decoration: none;
+            color: white;
+            background-color:rgb(11, 99, 231);
+        }
+
+        .btn-return {
+            background-color: #3e5771;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            border:0px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .btn-return i {
+            margin-right: 5px;
+        }
+
+        .btn-return:hover {
+            text-decoration: none;
+            color: white;
+            background-color:#2e4154
+        }
+    </style>
+</head>
+<body>
+
+    {% include 'navdash.html' %}
+
+    <div class="container">
+
+        <br>
+
+        {% block content %}
+            <div class="form">
+                <div class="container mt-0">
+                    <h2>Update Lead record</h2>
+                    <p>Update your record down below.</p>
+                    <hr class="my-3 border-dark">
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="form-label">First name*</label>
+                                <input type="text" name="first_name" class="form-control" value="{{ lead_update.first_name }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Last name*</label>
+                                <input type="text" name="last_name" class="form-control" value="{{ lead_update.last_name }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email*</label>
+                                <input type="email" name="email" class="form-control" value="{{ lead_update.email }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Phone*</label>
+                                <input type="text" name="phone" class="form-control" value="{{ lead_update.phone }}" minlength="10" maxlength="10" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Address*</label>
+                                <input type="text" name="address" class="form-control" value="{{ lead_update.address }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">City*</label>
+                                <input type="text" name="city" class="form-control" value="{{ lead_update.city }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Country*</label>
+                                <input type="text" name="country" class="form-control" value="{{ lead_update.country }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Item*</label>
+                                <select name="item" id="item" class="form-select" value="{{ lead_update.item }}" required>
+                                    <option value="Laptop" {% if lead_update.item == "Laptop" %} selected {% endif %}>Laptop</option>
+                                    <option value="Mouse" {% if lead_update.item == "Mouse" %} selected {% endif %}>Mouse</option>
+                                    <option value="Keyboard" {% if lead_update.item == "Keyboard" %} selected {% endif %}>Keyboard</option>
+                                    <option value="Graphics Card" {% if lead_update.item == "Graphics Card" %} selected {% endif %}>Graphics Card</option>
+                                    <option value="RAM" {% if lead_update.item == "RAM" %} selected {% endif %}>RAM</option>
+                                    <option value="Processor (CPU)" {% if lead_update.item == "Processor (CPU)" %} selected {% endif %}>Processor (CPU)</option>
+                                    <option value="Motherboard" {% if lead_update.item == "Motherboard" %} selected {% endif %}>Motherboard</option>
+                                    <option value="Hard Drive (HDD)" {% if lead_update.item == "Hard Drive (HDD)" %} selected {% endif %}>Hard Drive (HDD)</option>
+                                    <option value="Solid State Drive (SSD)" {% if lead_update.item == "Solid State Drive (SSD)" %} selected {% endif %}>Solid State Drive (SSD)</option>
+                                    <option value="Printer" {% if lead_update.item == "Printer" %} selected {% endif %}>Printer</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="source">Source*</label>
+                                <select name="source" id="source" class="form-select" value="{{ lead_update.source }}" required>
+                                    <option value="Advertisement" {% if lead_update.source == "Advertisement" %} selected {% endif %}>Advertisement</option>
+                                    <option value="Campaign" {% if lead_update.source == "Campaign" %} selected {% endif %}>Campaign</option>
+                                    <option value="Cold Calling" {% if lead_update.source == "Cold Calling" %} selected {% endif %}>Cold Calling</option>
+                                    <option value="Reference" {% if lead_update.source == "Reference" %} selected {% endif %}>Reference</option>
+                                    <option value="Other" {% if lead_update.source == "Other" %} selected {% endif %}>Other</option>
+                                </select> 
+                            </div>
+        
+                            <div class="form-group">
+                                <label for="status">Status*</label>
+                                <select name="status" id="status" class="form-select" value="{{ lead_update.status }}" required>
+                                    <option value="Lead" {% if lead_update.status == "Lead" %} selected {% endif %}>Lead</option>
+                                    <option value="Opportunity" {% if lead_update.status == "Opportunity" %} selected {% endif %}>Opportunity</option>
+                                    <option value="Quotation" {% if lead_update.status == "Quotation" %} selected {% endif %}>Quotation</option>
+                                    <option value="Lost Quotation" {% if lead_update.status == "Lost Quotation" %} selected {% endif %}>Lost Quotation</option>
+                                    
+                                </select>
+                            </div>
+        
+                            <div class="form-group">
+                                <label for="lead_owner">Lead Owner*</label>
+                                <select name="lead_owner" id="lead_owner" class="form-select" required>
+                                    {% for row in users %}
+                                        <option value="{{ row.id }}" {% if row.id == lead_update.lead_owner.id %} selected {% endif %}>
+                                            {{ row.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="btn-container">
+                            <button type="submit" class="btn-update">
+                                <i class="fa fa-save"></i> &nbsp;Update record
+                            </button>
+
+                            &nbsp;&nbsp;&nbsp;
+
+                            <a href="{% url 'view_lead' lead_update.id %}" class="btn-return">
+                                <i class="fa fa-arrow-left"></i> Return
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>   
+        {% endblock %}
+    </div>
+
+</body>
+</html>
